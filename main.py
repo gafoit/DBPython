@@ -41,10 +41,10 @@ class MyWindow(QtWidgets.QMainWindow):
     def chooseDialog(self):
         match self.sender():
             case self.ui.pushButton:
-                self.Input_Dialog = ResInpDialog()
+                self.Input_Dialog = ResInpDialog(self)
                 self.Input_Dialog.accepted.connect(self.accepted)
             case self.ui.pushButton_2:
-                self.Input_Dialog = MenuInsert()
+                self.Input_Dialog = MenuInsert(self)
                 self.Input_Dialog.accepted.connect(self.accepted)
             case self.ui.pushButton_3:
                 self.Input_Dialog = RateInsert()
@@ -123,6 +123,57 @@ try:
     app = QtWidgets.QApplication([])
     application = MyWindow()
     application.setWindowTitle("OraDB")
+    application.setStyleSheet("""
+    QMainWindow{
+        background:#C7E7C7;
+    }
+    QTabWidget::pane { 
+        background: #C7E7C7; /* Зелёный фон панели вкладок */
+        border: 3px solid #B4D8B4;
+    }
+    QTabBar::tab {
+        background: #D8BFD8; /* Сиреневый цвет вкладки */
+        color: #4F4F4F; /* Цвет текста на вкладке */
+        padding: 5px;
+        border: 3px solid #B4D8B4;
+        border-radius: 5px;
+        margin: 2px;
+    }
+    QTabBar::tab:selected {
+        background: #C7E7C7; /* Зелёный цвет активной вкладки */
+        color: #2F4F2F; /* Цвет текста активной вкладки */
+    }
+    QTabBar::tab:hover {
+        background: #B4D8B4; /* Более насыщенный зелёный при наведении */
+    }
+    
+    QPushButton {
+        background-color: #C7E7C7; /* Зелёный для кнопок */
+        border: 3px solid #B4D8B4;
+        border-radius: 5px;
+        padding: 5px;
+        color: #4F4F4F; /* Цвет текста на кнопках */
+    }
+    QPushButton:hover {
+        background-color: #B4D8B4; /* Более насыщенный зелёный при наведении */
+    }
+    
+    QTableWidget {
+        alternate-background-color: #C7E7C7; /* Зелёный для альтернативных строк */
+        background-color: #D8BFD8; /* Сиреневый основной фон */
+    }
+    QHeaderView::section {
+    background-color: #C7E7C7; /* Зелёный фон для заголовков */
+    color: #2F4F2F; /* Тёмно-зелёный текст */
+    border: 1px solid #B4D8B4;
+    padding: 4px;
+    font-weight: bold; /* Жирный текст для акцента */
+    }
+    QTableCornerButton::section {
+    background-color: #C7E7C7; /* Цвет фона для угловой ячейки */
+    border: 1px solid #B4D8B4; /* Граница, чтобы она соответствовала остальным */
+}
+""")
     application.show()
     application.setColumns()
     application.setRows()

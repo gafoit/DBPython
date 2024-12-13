@@ -4,7 +4,7 @@ from Connector import insert_restraunt, con
 from ErrDialog import ErrDialog
 
 
-class ResInpDialog(QtWidgets.QWidget):
+class ResInpDialog(QtWidgets.QDialog):
     accepted = QtCore.Signal()
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -31,5 +31,3 @@ class ResInpDialog(QtWidgets.QWidget):
         self.accepted.emit()
         self.close()
 
-    def reject(self):
-        self.close()

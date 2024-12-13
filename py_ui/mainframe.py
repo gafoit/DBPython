@@ -25,9 +25,13 @@ class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
-        MainWindow.resize(803, 600)
+        MainWindow.resize(803, 598)
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
+        self.centralwidget.setStyleSheet(u"background-color:rgb(216, 191, 216);\n"
+"alternate-background-color: rgb(199, 231, 199);\n"
+"color:#5A3A5C;\n"
+"font: 9pt \"Fixedsys\";")
         self.gridLayout = QGridLayout(self.centralwidget)
         self.gridLayout.setObjectName(u"gridLayout")
         self.widget = QWidget(self.centralwidget)
@@ -48,7 +52,10 @@ class Ui_MainWindow(object):
         self.label = QLabel(self.widget)
         self.label.setObjectName(u"label")
         font = QFont()
-        font.setBold(True)
+        font.setFamilies([u"Fixedsys"])
+        font.setPointSize(9)
+        font.setBold(False)
+        font.setItalic(False)
         self.label.setFont(font)
         self.label.setFrameShape(QFrame.Shape.Box)
         self.label.setFrameShadow(QFrame.Shadow.Sunken)
@@ -143,6 +150,8 @@ class Ui_MainWindow(object):
         self.tableWidget.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
         self.tableWidget.setAlternatingRowColors(True)
         self.tableWidget.setSortingEnabled(False)
+        self.tableWidget.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        self.tableWidget.verticalHeader().setCascadingSectionResizes(True)
 
         self.gridLayout_2.addWidget(self.tableWidget, 0, 0, 1, 1)
 
@@ -156,6 +165,7 @@ class Ui_MainWindow(object):
         self.tableWidget_2.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
         self.tableWidget_2.setAlternatingRowColors(True)
         self.tableWidget_2.setSortingEnabled(False)
+        self.tableWidget_2.verticalHeader().setCascadingSectionResizes(True)
 
         self.gridLayout_3.addWidget(self.tableWidget_2, 0, 0, 1, 1)
 
@@ -169,6 +179,7 @@ class Ui_MainWindow(object):
         self.tableWidget_3.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
         self.tableWidget_3.setAlternatingRowColors(True)
         self.tableWidget_3.setSortingEnabled(False)
+        self.tableWidget_3.verticalHeader().setCascadingSectionResizes(True)
 
         self.gridLayout_4.addWidget(self.tableWidget_3, 0, 0, 1, 1)
 
@@ -183,6 +194,7 @@ class Ui_MainWindow(object):
         self.tableWidget_4.setDragEnabled(False)
         self.tableWidget_4.setAlternatingRowColors(True)
         self.tableWidget_4.setSortingEnabled(False)
+        self.tableWidget_4.verticalHeader().setCascadingSectionResizes(True)
 
         self.gridLayout_5.addWidget(self.tableWidget_4, 0, 0, 1, 1)
 
@@ -202,11 +214,10 @@ class Ui_MainWindow(object):
         self.retranslateUi(MainWindow)
 
         self.tabWidget.setCurrentIndex(0)
-        self.tableWidget.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+
         self.tableWidget_2.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
         self.tableWidget_3.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
         self.tableWidget_4.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
-
         QMetaObject.connectSlotsByName(MainWindow)
     # setupUi
 
