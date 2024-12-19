@@ -1,4 +1,3 @@
-import PySide6.QtCore
 from PySide6 import QtCore, QtWidgets, QtGui
 from py_ui.ErrDialogUI import Ui_Dialog
 
@@ -11,7 +10,10 @@ class ErrDialog(QtWidgets.QDialog):
 
     def setErr(self, errMessage):
         #print(errMessage)
-        self.ui.textEdit.setText(errMessage.encode('Windows-1251').decode('utf-8'))
+        try:
+            self.ui.textEdit.setText(errMessage.encode('Windows-1251').decode('utf-8'))
+        except UnicodeDecodeError:
+            self.ui.textEdit.setText(errMessage)
 
 
 if __name__ == '__main__':

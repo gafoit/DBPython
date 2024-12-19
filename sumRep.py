@@ -4,7 +4,7 @@ from Connector import get_summary_report, con
 from ErrDialog import ErrDialog
 
 
-class SumRep(QtWidgets.QWidget):
+class SumRep(QtWidgets.QDialog):
     acceptedL = QtCore.Signal(str, list)
 
     def __init__(self, parent=None):
@@ -28,7 +28,6 @@ class SumRep(QtWidgets.QWidget):
             err.setErr(''.join(map(str, [i for i in e.args])))
             err.exec()
         self.acceptedL.emit('Отчёт', table)
+        self.accepted.emit()
         self.close()
 
-    def reject(self):
-        self.close()

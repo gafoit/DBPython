@@ -3,7 +3,7 @@ from py_ui.ViewLogUI import Ui_Dialog
 from Connector import get_view_logs, con
 from ErrDialog import ErrDialog
 
-class Viewlog(QtWidgets.QWidget):
+class Viewlog(QtWidgets.QDialog):
     acceptedL = QtCore.Signal(str,list)
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -20,7 +20,6 @@ class Viewlog(QtWidgets.QWidget):
             err.setErr(''.join(map(str, [i for i in e.args])))
             err.exec()
         self.acceptedL.emit('Часть логов',table)
+        self.accepted.emit()
         self.close()
 
-    def reject(self):
-        self.close()

@@ -24,6 +24,7 @@ class Ui_Dialog(object):
         if not Dialog.objectName():
             Dialog.setObjectName(u"Dialog")
         Dialog.resize(324, 221)
+        Dialog.setStyleSheet(u"font: 9pt \"Fixedsys\";")
         self.gridLayout = QGridLayout(Dialog)
         self.gridLayout.setObjectName(u"gridLayout")
         self.buttonBox = QDialogButtonBox(Dialog)

@@ -2,10 +2,10 @@ import oracledb as odb
 
 from ErrDialog import ErrDialog
 
-user = 'gft'
-pswd = 'Gaf01t'
+user = 'stud09'
+pswd = 'stud09'
 odb.init_oracle_client()
-con = odb.connect(user=user, password=pswd, dsn="localhost/XE")
+con = odb.connect(user=user, password=pswd,dsn="82.179.14.185:1521/nmics")
 
 cur = con.cursor()
 out_cur = con.cursor()
@@ -14,9 +14,24 @@ out_cur = con.cursor()
 def get_summary_report(connect: odb.Connection, f1: str, f2: str, f3: str):
     cursor = connect.cursor()
     out_cursor = connect.cursor()
-    cursor.callproc('summary_report', [f1, f2, f3, out_cursor])
+    cursor.callproc('sumrep', [f1, f2, f3, out_cursor])
     return [[i[0] for i in out_cursor.description]] + out_cursor.fetchall()
 
+
+def get_air(connect: odb.Connection):
+    cursor = connect.cursor()
+    cursor.execute('''select * from a_air order by id''')
+    return [[i[0] for i  in cursor.description],]+cursor.fetchall()
+
+def get_ord(connect: odb.Connection):
+    cursor = connect.cursor()
+    cursor.execute('''select * from a_ord order by id''')
+    return [[i[0] for i  in cursor.description],]+cursor.fetchall()
+
+def get_customer(connect: odb.Connection):
+    cursor = connect.cursor()
+    cursor.execute('''select * from a_customer order by id''')
+    return [[i[0] for i  in cursor.description],]+cursor.fetchall()
 
 def get_menu(connect: odb.Connection):
     cursor = connect.cursor()
@@ -102,3 +117,41 @@ def time_walk(connect: odb.Connection, e_id: int):
     cursor = connect.cursor()
     cursor.callproc('time_walk', [e_id])
     cursor.close()
+
+def otkat(connect: odb.Connection, e_id: int):
+    cursor = connect.cursor()
+    cursor.callproc('otkat', [e_id])
+    cursor.close()
+
+def insert_air (connect: odb.Connection,p_name:str,p_d:int,p_o:int,p_k:int,places:int,dvige_quantity:int):
+    cursor = connect.cursor()
+    cursor.callproc('insert_air', [p_name, p_d, p_o, p_k, places, dvige_quantity])
+    cursor.close()
+
+def insert_customer(connect: odb.Connection,p_name:str,r_id:int,phone:str):
+    cursor = connect.cursor()
+    cursor.callproc('insert_customer', [p_name, r_id, phone])
+    cursor.close()
+
+def insert_ord(connect: odb.Connection,c_id,a_id,d_id,o_id,total,date):
+    cursor = connect.cursor()
+    cursor.callproc('insert_ord',[c_id,a_id,d_id,o_id,total,date,'DD.MM.YYYY HH24:MI'])
+    cursor.close()
+
+def update_air (connect: odb.Connection,a_id,p_name:str,p_d:int,p_o:int,p_k:int,places:int,dvige_quantity:int):
+    cursor = connect.cursor()
+    cursor.callproc('update_air', [a_id,p_name, p_d, p_o, p_k, places, dvige_quantity])
+    cursor.close()
+
+def update_customer(connect: odb.Connection,c_id,p_name:str,r_id:int,phone:str):
+    cursor = connect.cursor()
+    cursor.callproc('update_customer', [c_id,p_name, r_id, phone])
+    cursor.close()
+
+def update_ord(connect: odb.Connection,o_id,c_id,a_id,d_id,ob_id,total,date):
+    cursor = connect.cursor()
+    cursor.callproc('update_ord',[o_id,c_id,a_id,d_id,ob_id,total,date,'DD.MM.YYYY HH24:MI'])
+    cursor.close()
+
+if __name__ == '__main__':
+    print(get_air(con))

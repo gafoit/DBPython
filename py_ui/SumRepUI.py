@@ -22,6 +22,7 @@ class Ui_Dialog(object):
     def setupUi(self, Dialog):
         if not Dialog.objectName():
             Dialog.setObjectName(u"Dialog")
+        Dialog.setStyleSheet(u"font: 9pt \"Fixedsys\";")
         Dialog.resize(226, 120)
         self.verticalLayout = QVBoxLayout(Dialog)
         self.verticalLayout.setObjectName(u"verticalLayout")

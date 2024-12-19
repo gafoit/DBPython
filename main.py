@@ -1,20 +1,24 @@
 import sys
 from PySide6 import QtCore, QtWidgets, QtGui
+from PySide6.QtWidgets import QHeaderView
 
+from AirInsert import AirInsert
+from AirUpdate import AirUpdate
+from CustomerInsert import CustomerInsert
+from CustomerUpdate import CustomerUpdate
 from MenuInsert import MenuInsert
 from MenuUpdate import MenuUpdate
-from ResInp import ResInpDialog
-from ResUpd import ResUpdDialog
+from OrdInsert import OrdInsert
+from OrdUpdate import OrdUpdate
 from deleter import Deleter
 from py_ui.mainframe import Ui_MainWindow
 from DBTables import *
-from Connector import con,  get_menu, get_rate, get_restraunt, get_entity_log, commit
-from rankInsert import RateInsert
+from Connector import con, get_menu, get_rate, get_restraunt, get_entity_log, commit, get_air, get_customer, get_ord
 from rankUpdate import RateUpdate
 from sumRep import SumRep
 from tableView import TableView
 from ViewLog import Viewlog
-from timeWalk import TimeWalk
+from timeWalk import otkat
 
 
 class MyWindow(QtWidgets.QMainWindow):
@@ -23,6 +27,12 @@ class MyWindow(QtWidgets.QMainWindow):
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
         self.Input_Dialog = None
+        self.ui.tabWidget.setCurrentIndex(0)
+
+        self.ui.tableWidget_2.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        self.ui.tableWidget.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        self.ui.tableWidget_3.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        self.ui.tableWidget_4.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
         self.ui.pushButton.clicked.connect(self.chooseDialog)
         self.ui.pushButton_2.clicked.connect(self.chooseDialog)
         self.ui.pushButton_3.clicked.connect(self.chooseDialog)
@@ -39,42 +49,49 @@ class MyWindow(QtWidgets.QMainWindow):
         self.ui.tabWidget.currentChanged.connect(self.setRows)
 
     def chooseDialog(self):
-        match self.sender():
-            case self.ui.pushButton:
-                self.Input_Dialog = ResInpDialog(self)
-                self.Input_Dialog.accepted.connect(self.accepted)
-            case self.ui.pushButton_2:
-                self.Input_Dialog = MenuInsert(self)
-                self.Input_Dialog.accepted.connect(self.accepted)
-            case self.ui.pushButton_3:
-                self.Input_Dialog = RateInsert()
-                self.Input_Dialog.accepted.connect(self.accepted)
-            case self.ui.pushButton_4:
-                self.Input_Dialog = ResUpdDialog()
-                self.Input_Dialog.accepted.connect(self.accepted)
-            case self.ui.pushButton_5:
-                self.Input_Dialog = MenuUpdate()
-                self.Input_Dialog.accepted.connect(self.accepted)
-            case self.ui.pushButton_6:
-                self.Input_Dialog = RateUpdate()
-                self.Input_Dialog.accepted.connect(self.accepted)
-            case self.ui.pushButton_7:
-                self.Input_Dialog = Deleter()
-                self.Input_Dialog.accepted.connect(self.accepted)
-            case self.ui.pushButton_8:
-                self.Input_Dialog = Viewlog()
-                self.Input_Dialog.acceptedL.connect(self.acceptedList)
-            case self.ui.pushButton_9:
-                self.Input_Dialog = TimeWalk()
-                self.Input_Dialog.accepted.connect(self.accepted)
-            case self.ui.pushButton_10:
-                self.Input_Dialog = SumRep()
-                self.Input_Dialog.acceptedL.connect(self.acceptedList)
-            case _:
-                self.Input_Dialog = None
-        self.Input_Dialog.show()
+        if self.Input_Dialog is None:
+            match self.sender():
+                case self.ui.pushButton:
+                    self.Input_Dialog = AirInsert(self)
+                    self.Input_Dialog.accepted.connect(self.accepted)
+                case self.ui.pushButton_2:
+                    self.Input_Dialog = OrdInsert(self)
+                    self.Input_Dialog.accepted.connect(self.accepted)
+                case self.ui.pushButton_3:
+                    self.Input_Dialog = CustomerInsert(self)
+                    self.Input_Dialog.accepted.connect(self.accepted)
+                case self.ui.pushButton_4:
+                    self.Input_Dialog = AirUpdate(self)
+                    self.Input_Dialog.accepted.connect(self.accepted)
+                case self.ui.pushButton_5:
+                    self.Input_Dialog = OrdUpdate(self)
+                    self.Input_Dialog.accepted.connect(self.accepted)
+                case self.ui.pushButton_6:
+                    self.Input_Dialog = CustomerUpdate(self)
+                    self.Input_Dialog.accepted.connect(self.accepted)
+                case self.ui.pushButton_7:
+                    self.Input_Dialog = Deleter(self)
+                    self.Input_Dialog.accepted.connect(self.accepted)
+                case self.ui.pushButton_8:
+                    self.Input_Dialog = Viewlog(self)
+                    self.Input_Dialog.acceptedL.connect(self.acceptedList)
+                case self.ui.pushButton_9:
+                    self.Input_Dialog = otkat(self)
+                    self.Input_Dialog.accepted.connect(self.accepted)
+                case self.ui.pushButton_10:
+                    self.Input_Dialog = SumRep(self)
+                    self.Input_Dialog.acceptedL.connect(self.acceptedList)
+                case _:
+                    self.Input_Dialog = None
+            self.Input_Dialog.show()
+            self.Input_Dialog.rejected.connect(self.close_dialog)
+        else:
+            self.Input_Dialog.close()
+            self.Input_Dialog = None
 
-    def setColumns(self):
+    def close_dialog(self):
+        self.Input_Dialog = None
+    """def setColumns(self):
         self.ui.tableWidget.setColumnCount(len(restraunts))
         self.ui.tableWidget.setHorizontalHeaderLabels([str(i) for i in restraunts])
         self.ui.tableWidget_2.setColumnCount(len(menu))
@@ -82,20 +99,30 @@ class MyWindow(QtWidgets.QMainWindow):
         self.ui.tableWidget_3.setColumnCount(len(rate))
         self.ui.tableWidget_3.setHorizontalHeaderLabels([str(i) for i in rate])
         self.ui.tableWidget_4.setColumnCount(len(entity_log))
+        self.ui.tableWidget_4.setHorizontalHeaderLabels([str(i) for i in entity_log])"""
+
+    def  setColumns(self):
+        self.ui.tableWidget.setColumnCount(len(get_air(con)[0]))
+        self.ui.tableWidget.setHorizontalHeaderLabels([str(i) for i in get_air(con)[0]])
+        self.ui.tableWidget_2.setColumnCount(len(get_customer(con)[0]))
+        self.ui.tableWidget_2.setHorizontalHeaderLabels([str(i) for i in get_customer(con)[0]])
+        self.ui.tableWidget_3.setColumnCount(len(get_ord(con)[0]))
+        self.ui.tableWidget_3.setHorizontalHeaderLabels([str(i) for i in get_ord(con)[0]])
+        self.ui.tableWidget_4.setColumnCount(len(entity_log))
         self.ui.tableWidget_4.setHorizontalHeaderLabels([str(i) for i in entity_log])
 
     def setRows(self):
-        table = get_restraunt(con)
+        table = get_air(con)[1:]
         self.ui.tableWidget.setRowCount(len(table))
         for i in range(self.ui.tableWidget.rowCount()):
             for j in range(len(table[0])):
                 self.ui.tableWidget.setItem(i, j, QtWidgets.QTableWidgetItem(str(table[i][j])))
-        table = get_menu(con)
+        table = get_customer(con)[1:]
         self.ui.tableWidget_2.setRowCount(len(table))
         for i in range(self.ui.tableWidget_2.rowCount()):
             for j in range(len(table[0])):
                 self.ui.tableWidget_2.setItem(i, j, QtWidgets.QTableWidgetItem(str(table[i][j])))
-        table = get_rate(con)
+        table = get_ord(con)[1:]
         self.ui.tableWidget_3.setRowCount(len(table))
         for i in range(self.ui.tableWidget_3.rowCount()):
             for j in range(len(table[0])):
@@ -122,15 +149,21 @@ class MyWindow(QtWidgets.QMainWindow):
 try:
     app = QtWidgets.QApplication([])
     application = MyWindow()
-    application.setWindowTitle("OraDB")
+    application.setWindowTitle("БДшка")
     application.setStyleSheet("""
     QMainWindow{
         background:#C7E7C7;
+        
     }
     QTabWidget::pane { 
         background: #C7E7C7; /* Зелёный фон панели вкладок */
         border: 3px solid #B4D8B4;
     }
+    QDialog{
+        background:#D8BFD8;
+        
+    }
+
     QTabBar::tab {
         background: #D8BFD8; /* Сиреневый цвет вкладки */
         color: #4F4F4F; /* Цвет текста на вкладке */
@@ -139,6 +172,9 @@ try:
         border-radius: 5px;
         margin: 2px;
     }
+    QTabWidget::tab-bar {
+                alignment: center;
+            }
     QTabBar::tab:selected {
         background: #C7E7C7; /* Зелёный цвет активной вкладки */
         color: #2F4F2F; /* Цвет текста активной вкладки */
@@ -157,7 +193,6 @@ try:
     QPushButton:hover {
         background-color: #B4D8B4; /* Более насыщенный зелёный при наведении */
     }
-    
     QTableWidget {
         alternate-background-color: #C7E7C7; /* Зелёный для альтернативных строк */
         background-color: #D8BFD8; /* Сиреневый основной фон */

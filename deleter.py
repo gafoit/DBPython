@@ -4,9 +4,7 @@ from Connector import deleter, con
 from ErrDialog import ErrDialog
 
 
-class Deleter(QtWidgets.QWidget):
-    accepted = QtCore.Signal()
-
+class Deleter(QtWidgets.QDialog):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.ui = Ui_Dialog()
@@ -25,7 +23,4 @@ class Deleter(QtWidgets.QWidget):
             err.setErr(''.join(map(str, [i for i in e.args])))
             err.exec()
         self.accepted.emit()
-        self.close()
-
-    def reject(self):
         self.close()

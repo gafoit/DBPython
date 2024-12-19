@@ -4,9 +4,7 @@ from Connector import insert_menu, con
 from ErrDialog import ErrDialog
 
 
-class MenuInsert(QtWidgets.QWidget):
-    accepted = QtCore.Signal()
-
+class MenuInsert(QtWidgets.QDialog):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.ui = Ui_Dialog()
@@ -31,5 +29,3 @@ class MenuInsert(QtWidgets.QWidget):
         self.accepted.emit()
         self.close()
 
-    def reject(self):
-        self.close()

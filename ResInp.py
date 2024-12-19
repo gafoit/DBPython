@@ -5,7 +5,6 @@ from ErrDialog import ErrDialog
 
 
 class ResInpDialog(QtWidgets.QDialog):
-    accepted = QtCore.Signal()
     def __init__(self, parent=None):
         super().__init__(parent)
         self.ui = Ui_Dialog()
